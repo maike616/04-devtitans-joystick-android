@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: GPL-2.0-only
+#
+# IPACK configuration.
+#
+
+config TITANSTATION
+ tristate "Joystick module"
+ default m
+ depends on MODULES
+ help
+   Devtitans controller.
