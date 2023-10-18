@@ -437,8 +437,8 @@ MODULE_VERSION("1.0");
 
 
 // mapping of buttons numbers to buttons
-static const int button_mapping[8] = {BTN_A, BTN_B, BTN_SELECT,\
-BTN_START, ABS_HAT0Y, ABS_HAT0Y, ABS_HAT0X, ABS_HAT0X};
+static const int button_mapping[10] = {BTN_A, BTN_B, BTN_X, BTN_Y, BTN_SELECT,\
+BTN_START, ABS_HAT0Y, ABS_HAT0Y, ABS_HAT0X, ABS_HAT0X };
 
 // struct needed for input.h (lib that actually includes our controller into the
 // input subsystem)
@@ -502,7 +502,7 @@ static void poll_snes(void) {
 	usleep_range(6, 12);
 	// begin a loop over the 16 clock cylces and poll the data
 
-	for (current_button=0; current_button < 8; current_button++) {
+	for (current_button=0; current_button < 10; current_button++) {
 		uint8_t gpio_state = gpio_get_value(GPIO_DATA);
 		// we read (data in active low)
 		if (gpio_state == 0) {
@@ -521,12 +521,12 @@ static void poll_snes(void) {
 
 	// now we're going to report the polled data (only 12 buttons, 4 undefined
 	// will be ignored - they're pulled to ground anyways)
-	for (current_button=0; current_button < 8; current_button++) {
+	for (current_button=0; current_button < 10; current_button++) {
 		// if the button is a direction from the DPAD, then the data will get
 		// special threatment
-		if (current_button >= 4 && current_button <= 7) {
+		if (current_button >= 6 && current_button <= 9) {
 			switch (current_button) {
-				case 4:
+				case 6:
 					if ((data & (1 << current_button)) != 0) {
 						printk(KERN_INFO "CIMA");
 						input_event(snes_dev, EV_ABS, button_mapping[current_button], -1);
@@ -534,7 +534,7 @@ static void poll_snes(void) {
 						++current_button;
 					}	
 					continue;
-				case 5:
+				case 7:
 					if ((data & (1 << current_button)) != 0) {
 						printk(KERN_INFO "BAIXO");
 						input_event(snes_dev, EV_ABS, button_mapping[current_button], 1);
@@ -543,7 +543,7 @@ static void poll_snes(void) {
 						input_event(snes_dev, EV_ABS, button_mapping[current_button], 0);
 					}
 					continue;
-				case 6:
+				case 8:
 					if ((data & (1 << current_button)) != 0) {
 						printk(KERN_INFO "ESQUERDA");
 						input_event(snes_dev, EV_ABS, button_mapping[current_button], -1);
@@ -551,7 +551,7 @@ static void poll_snes(void) {
 						++current_button;
 					}	
 					continue;
-				case 7:
+				case 9:
 					if ((data & (1 << current_button)) != 0) {
 						printk(KERN_INFO "DIREITA");
 						input_event(snes_dev, EV_ABS, button_mapping[current_button], 1);
@@ -564,6 +564,7 @@ static void poll_snes(void) {
 		}
 
 		if ((data & (1 << current_button)) != 0) {
+			printk(KERN_INFO "BOTAO %d", current_button);
 			input_event(snes_dev, EV_KEY, button_mapping[current_button], 1);
 		} else {
 			input_event(snes_dev, EV_KEY, button_mapping[current_button], 0);
