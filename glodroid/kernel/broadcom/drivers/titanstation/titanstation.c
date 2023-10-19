@@ -437,8 +437,13 @@ MODULE_VERSION("1.0");
 
 
 // mapping of buttons numbers to buttons
-static const int button_mapping[10] = {BTN_A, BTN_B, BTN_X, BTN_Y, BTN_SELECT,\
+// static const int button_mapping[10] = {BTN_A, BTN_B, BTN_X, BTN_Y, BTN_SELECT,\
+// BTN_START, ABS_HAT0Y, ABS_HAT0Y, ABS_HAT0X, ABS_HAT0X };
+
+// mapping of buttons numbers to buttons
+static const int button_mapping[10] = {BTN_Y, BTN_B, BTN_A, BTN_X, BTN_SELECT,\
 BTN_START, ABS_HAT0Y, ABS_HAT0Y, ABS_HAT0X, ABS_HAT0X };
+
 
 // struct needed for input.h (lib that actually includes our controller into the
 // input subsystem)
